@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #weather-container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        #weather-data {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div id="weather-container">
+        <h2>Weather App</h2>
+        <input type="text" id="location-input" placeholder="Enter a location">
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="weather-data"></div>
+    </div>
+
+    <script>
+        function getWeather() {
+            const locationInput = document.getElementById('location-input').value;
+            const apiKey = '8926d86739d2e94ec302a4f53a8b8d7f'; // Replace 'YOUR_API_KEY' with your OpenWeatherMap API key
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${locationInput}&appid=${apiKey}&units=metric`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const weatherData = {
+                        location: data.name,
+                        temperature: data.main.temp,
+                        description: data.weather[0].description,
+                    };
+
+                    displayWeather(weatherData);
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                    alert('Error fetching weather data. Please try again.');
+                });
+        }
+
+        function displayWeather(weatherData) {
+            const weatherContainer = document.getElementById('weather-data');
+            weatherContainer.innerHTML = `
+                <p>Location: ${weatherData.location}</p>
+                <p>Temperature: ${weatherData.temperature}°C</p>
+                <p>Description: ${weatherData.description}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
